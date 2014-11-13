@@ -1,7 +1,7 @@
 ### Avocado
 Avocado is a deployment framework for web applications written in Ruby.
 
-The current release is 0.4.
+The current release is 0.4.1.
 
 ### Licensing
 Avocado is licensed under the GPLv2. For more Information have a look into the LICENSE file.
@@ -10,7 +10,7 @@ Avocado is licensed under the GPLv2. For more Information have a look into the L
 Avocado does currently only work if you use Git for as version control system and SSH to deploy. Furthermore, the only implemented authentication method for both SSH and Git is public key authentication.
 
 ### Getting started
-Be sure that you have installed Ruby 2.1 or higher and RubyGems. Then the Installation is as easy as
+Be sure that you have installed Ruby 2.0 or higher and RubyGems. Then the Installation is as easy as
 
 ```
 $ gem install avodeploy

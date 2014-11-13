@@ -16,10 +16,14 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-module Avocado
-	class TaskDependency
-		attr_accessor :task_name
-		attr_accessor :dependent_task_name
-		attr_accessor :type
+AvoDeploy::Deployment.configure do
+	
+	task :deploy, visibility: :public do
+		# stub for cli calls
 	end
+
+	task :check_ssh_connection, before: :deploy, scope: :remote, visibility: :private do
+		log.info "checking ssh connection"
+	end
+
 end

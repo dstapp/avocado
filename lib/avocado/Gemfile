@@ -1,9 +1,0 @@
-source 'https://rubygems.org'
-
-gem 'awesome_print'
-gem 'table_print'
-
-gem 'net-ssh'
-gem 'net-scp'
-
-gem 'thor'

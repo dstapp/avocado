@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'avocado/version'
+require 'avodeploy/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "avodeploy"
@@ -21,8 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
 
-  spec.add_dependency "awesome_print", "~> 1.2.0"
-  spec.add_dependency "terminal-table"
+  spec.add_dependency "terminal-table", "~> 1.4.5"
   spec.add_dependency "net-ssh", "~> 2.9.1"
   spec.add_dependency "net-scp", "~> 1.2.1"
   spec.add_dependency "thor", "~> 0.19.1"

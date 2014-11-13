@@ -1,4 +1,10 @@
 0.4.1
+* Renamed Avocado's root module to `AvoDeploy` for gem naming convention compatibility
+* Avocado's APIs can now be used by requiring 'avodeploy'
+* Removed Avocado::Task::Task.pretty_print
+* Tasks and ScmProviders are now organized in submodules
+* terminal-table gem now fix at version 1.4.5
+* Removed awesome_print dependency
 * Remote code execution: target name will now be displayed
 * local_copy strategy: `Avofile` is now excluded by default
 * Tasks: Default directory is now the working copy (Task usability - chdir #5)

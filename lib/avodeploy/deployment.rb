@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-module Avocado
+module AvoDeploy
 	class Deployment
 
 		attr_accessor :config
@@ -27,8 +27,8 @@ module Avocado
 		# Initializes the deployment
 		def initialize
 			@stages = {}
-			@task_manager = Avocado::TaskManager.new
-			@config = Avocado::Config.new
+			@task_manager = AvoDeploy::Task::TaskManager.new
+			@config = AvoDeploy::Config.new
 
 			@log = ::Logger.new(STDOUT)
 		end

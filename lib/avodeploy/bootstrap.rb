@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-module Avocado
+module AvoDeploy
 	class Bootstrap
 		# Runs the avocado bootstrap
 		#
@@ -28,28 +28,9 @@ module Avocado
 				stage = stage.to_sym
 			end
 
-			require File.join(File.dirname(__FILE__), 'core_ext/string_colors.rb')
-			require File.join(File.dirname(__FILE__), 'core_ext/hash_insert_at.rb')
-
-			require File.join(File.dirname(__FILE__), 'task/task.rb')
-			require File.join(File.dirname(__FILE__), 'task/task_dependency.rb')
-			require File.join(File.dirname(__FILE__), 'task/task_manager.rb')
-			require File.join(File.dirname(__FILE__), 'task/task_execution_environment.rb')
-			require File.join(File.dirname(__FILE__), 'task/local_task_execution_environment.rb')
-			require File.join(File.dirname(__FILE__), 'task/remote_task_execution_environment.rb')
-
-			require File.join(File.dirname(__FILE__), 'scm_provider/scm_provider.rb')
-			require File.join(File.dirname(__FILE__), 'scm_provider/git_scm_provider.rb')
-
-			require File.join(File.dirname(__FILE__), 'multi_io.rb')
-			require File.join(File.dirname(__FILE__), 'command_execution_result.rb')
-			require File.join(File.dirname(__FILE__), 'target.rb')
-			require File.join(File.dirname(__FILE__), 'config.rb')
-			require File.join(File.dirname(__FILE__), 'deployment.rb')
-
 			begin
 				# defaults
-				Avocado::Deployment.configure do
+				AvoDeploy::Deployment.configure do
 					set :stage, stage
 				end
 
@@ -57,7 +38,7 @@ module Avocado
 					raise RuntimeError, 'Could not find Avofile. Run `avo install` first.'
 				end
 
-				instance = Avocado::Deployment.instance
+				instance = AvoDeploy::Deployment.instance
 
 				# load user config initially to determine strategy
 				begin
@@ -79,21 +60,20 @@ module Avocado
 
 				# load strategy
 				# @todo pruefen
-				require File.join(File.dirname(__FILE__), "strategy/base.rb")
-				require File.join(File.dirname(__FILE__), "strategy/#{instance.config.get(:strategy).to_s}.rb")
-
+				require "avocado/strategy/base.rb"
+				require "avocado/strategy/#{instance.config.get(:strategy).to_s}.rb"
 
 				instance.log.debug "Loading user configuration..."
 
 				# override again by user config to allow manipulation of tasks
 				load File.join(Dir.pwd, 'Avofile')
 			rescue Exception => e
-				Avocado::Deployment.instance.log.error e.message.red
+				AvoDeploy::Deployment.instance.log.error e.message.red
 				
 				Kernel.exit(true)
 			end
 
-			Avocado::Deployment.instance
+			AvoDeploy::Deployment.instance
 		end
 	end
 end

@@ -16,7 +16,7 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-Avocado::Deployment.configure do
+AvoDeploy::Deployment.configure do
 
 	task :check_local_tools, before: :deploy, scope: :local, visibility: :private do
 		check_util_availability [ 'tar' ].concat(@scm.cli_utils)

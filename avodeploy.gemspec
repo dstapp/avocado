@@ -5,7 +5,7 @@ require 'avodeploy/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "avodeploy"
-  spec.version       = Avocado::VERSION
+  spec.version       = AvoDeploy::VERSION
   spec.authors       = ["David Prandzioch"]
   spec.email         = ["dprandzioch@me.com"]
   spec.summary       = %q{Avocado is a flexible deployment framework for web applications.}

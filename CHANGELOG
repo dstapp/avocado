@@ -1,4 +1,5 @@
 0.4.1
+* `avo ... -d` now raises exceptions directly
 * Renamed Avocado's root module to `AvoDeploy` for gem naming convention compatibility
 * Avocado's APIs can now be used by requiring 'avodeploy'
 * Removed Avocado::Task::Task.pretty_print

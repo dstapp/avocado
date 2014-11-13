@@ -59,17 +59,21 @@ module AvoDeploy
 				instance.log.debug "Loading deployment strategy #{instance.config.get(:strategy).to_s}..."
 
 				# load strategy
-				# @todo pruefen
-				require "avocado/strategy/base.rb"
-				require "avocado/strategy/#{instance.config.get(:strategy).to_s}.rb"
+				# @todo check
+				require "avodeploy/strategy/base.rb"
+				require "avodeploy/strategy/#{instance.config.get(:strategy).to_s}.rb"
 
 				instance.log.debug "Loading user configuration..."
 
 				# override again by user config to allow manipulation of tasks
 				load File.join(Dir.pwd, 'Avofile')
 			rescue Exception => e
-				AvoDeploy::Deployment.instance.log.error e.message.red
-				
+				if debug
+					raise e
+				else 
+					AvoDeploy::Deployment.instance.log.error e.message.red
+				end
+
 				Kernel.exit(true)
 			end
 

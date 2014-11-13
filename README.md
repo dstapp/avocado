@@ -1,3 +1,5 @@
+develop: ![](https://travis-ci.org/dprandzioch/avocado.svg?branch=develop) | master: ![](https://travis-ci.org/dprandzioch/avocado.svg?branch=develop)
+
 ### Avocado
 Avocado is a deployment framework for web applications written in Ruby.
 

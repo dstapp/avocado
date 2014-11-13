@@ -1,4 +1,7 @@
 0.4.1
+* local_copy strategy now checks, if one or more target systems are specified
+* avo now raises an error if no valid stage is selected (avo [stage] deploy does not complain if the stage does not exist #7)
+* Added `default` stage (useful in some cases)
 * `avo ... -d` now raises exceptions directly
 * Renamed Avocado's root module to `AvoDeploy` for gem naming convention compatibility
 * Avocado's APIs can now be used by requiring 'avodeploy'

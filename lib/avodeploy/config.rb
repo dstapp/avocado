@@ -22,12 +22,14 @@ module AvoDeploy
 		attr_reader :config
 		attr_reader :stages
 		attr_reader :targets
+		attr_reader :loaded_stage
 
 		# Intializes the config object
 		def initialize
 			@config = setup_config_defaults
 			@stages = {}
 			@targets = {}
+			@loaded_stage = nil
 		end
 
 		# Sets a configuration item
@@ -64,11 +66,13 @@ module AvoDeploy
 		# @param block [Block] the stage configuration 
 		def setup_stage(name, options = {}, &block)
 			if options.has_key?(:desc)
-				stages[name] =  options[:desc]
+				stages[name] = options[:desc]
 			end
 
 			if name == get(:stage)
 				instance_eval(&block)
+
+				@loaded_stage = name
 			end
 		end
 

@@ -18,11 +18,15 @@
 
 AvoDeploy::Deployment.configure do
 
-	task :check_local_tools, before: :deploy, scope: :local, visibility: :private do
+	task :check_targets, before: :deploy do
+		raise RuntimeError, 'No target systems are configured' if targets.empty?
+	end
+
+	task :check_local_tools, before: :deploy do
 		check_util_availability [ 'tar' ].concat(@scm.cli_utils)
 	end
 
-	task :check_remote_system, before: :deploy, scope: :remote, visibility: :private do
+	task :check_remote_system, before: :deploy do
 		check_util_availability [ 'tar' ]
 	end
 

@@ -26,73 +26,71 @@ Avocado::Deployment.configure do
 		check_util_availability [ 'tar' ]
 	end
 
-	task :check_temp_existance, visibility: :private, after: :deploy, scope: :local do
+	task :check_temp_existance, after: :deploy do
 		if File.exist?('.avocado-tmp')
 			raise RuntimeError, 'The avocado tmp directory (.avocado-tmp) does already exist. That may indicate that another deployment is already running.'
 		end
 	end
 
-	task :switch_to_temp_dir, visibility: :private, after: :check_temp_existance, scope: :local do
+	task :switch_to_temp_dir, after: :check_temp_existance do
 		command "mkdir .avocado-tmp/"
-		chdir(".avocado-tmp/")
+		chdir ".avocado-tmp/"
 	end
 
-	task :checkout_from_scm, visibility: :private, after: :switch_to_temp_dir, scope: :local do
+	task :checkout_from_scm, after: :switch_to_temp_dir do
 		@scm.checkout_from_remote(get(:repo_url), 'working-copy', get(:branch))
 	end
 
-	task :get_scm_info, visibility: :private, after: :checkout_from_scm, scope: :local do
-		chdir("working-copy/")
-
-		set(:revision, @scm.revision)
-		
-		chdir("../")
+	task :chdir_to_working_copy, after: :checkout_from_scm do
+		chdir "working-copy/"
 	end
 
-	task :delete_ignored_files, visibility: :private, after: :get_scm_info, scope: :local do
-		if get(:ignore_files).concat(@scm.scm_files).size > 0
-			chdir("working-copy/")
-			command "rm -rfv #{get(:ignore_files).concat(@scm.scm_files).join(' ')}"
-			chdir("../")
-		end
+	task :get_scm_info, after: :chdir_to_working_copy do
+		set :revision, @scm.revision
 	end
 
-	task :create_revision_file, visibility: :private, after: :delete_ignored_files, scope: :local do
-		chdir("working-copy/")
+	task :delete_ignored_files, after: :get_scm_info do
+		files_to_delete = [ 'Avofile' ].concat(get(:ignore_files)).concat(@scm.scm_files)
+
+		command "rm -rfv #{files_to_delete.join(' ')}"
+	end
+
+	task :create_revision_file, after: :delete_ignored_files do
 		command "echo '#{get(:revision)}' > REVISION"
-		chdir("../")
 	end
 
-	task :create_deployment_tarball, visibility: :private, after: :create_revision_file, scope: :local do
-		chdir("working-copy/")
+	task :create_deployment_tarball, after: :create_revision_file do
 		command "tar cvfz ../deploy.tar.gz ."
-		chdir("../")
 	end
 
-	task :upload, visibility: :private, after: :create_deployment_tarball, scope: :local do
+	task :switch_to_parent_dir, after: :create_deployment_tarball do
+		chdir "../"
+	end
+
+	task :upload, after: :switch_to_parent_dir do
 		targets.each_pair do |key, target|
 			copy_to_target(target, 'deploy.tar.gz', '/tmp/deploy.tar.gz')
 		end
 	end
 
-	task :create_deploy_dir, visibility: :private, after: :upload, scope: :remote do
+	task :create_deploy_dir, after: :upload, scope: :remote do
 		command "if [ ! -d '#{get(:deploy_dir)}' ]; then mkdir -p #{get(:deploy_dir)}; fi"
 	end
 
-	task :unpack, visibility: :private, after: :create_deploy_dir, scope: :remote do
+	task :unpack, after: :create_deploy_dir, scope: :remote do
 		command "tar xvfz /tmp/deploy.tar.gz -C #{get(:deploy_dir)}/"
 	end
 
-	task :cleanup_remote, visibility: :private, after: :unpack, scope: :remote do
+	task :cleanup_remote, after: :unpack, scope: :remote do
 		command "rm /tmp/deploy.tar.gz"
 	end 
 
-	task :log_deployment, visibility: :private, after: :cleanup_remote, scope: :remote do
-		command "echo '[#{ Time.now.strftime('%Y-%m-%d %H-%M-%S')}] revision #{get(:revision)} deployed by #{ENV['USER']}' >> #{get(:log_file)}"
+	task :log_deployment, after: :cleanup_remote, scope: :remote do
+		command "echo '[#{Time.now.strftime('%Y-%m-%d %H-%M-%S')}] revision #{get(:revision)} deployed by #{ENV['USER']}' >> #{get(:log_file)}"
 	end
 
-	task :cleanup_local, visibility: :private, after: :cleanup_remote, scope: :local do
-		chdir("../")
+	task :cleanup_local, after: :cleanup_remote do
+		chdir "../"
 		command "rm -rf .avocado-tmp"
 	end
 

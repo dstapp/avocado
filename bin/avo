@@ -18,15 +18,10 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-require 'awesome_print'
-require 'terminal-table'
-require 'open3'
-require 'net/ssh'
-require 'net/scp'
 require 'thor'
 
 THIS_FILE = File.symlink?(__FILE__) ? File.readlink(__FILE__) : __FILE__
-require File.join(File.dirname(THIS_FILE), '../lib/avocado/bootstrap.rb')
+require File.join(File.dirname(THIS_FILE), '../lib/avodeploy.rb')
 
 class AvocadoCli < Thor
 
@@ -45,7 +40,7 @@ class AvocadoCli < Thor
 		right task chain for your needs.
 	LONGDESC
 	def start(stage, task)
-		instance = Avocado::Bootstrap.run(stage, options[:verbose], options[:debug])
+		instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
 		
 		if options[:nodeps]
 			instance.task_manager.invoke_task_oneshot(task)
@@ -64,14 +59,21 @@ class AvocadoCli < Thor
 			stage = :default
 		end
 
-		instance = Avocado::Bootstrap.run(stage, options[:verbose], options[:debug])
-		instance.task_manager.task_by_name(name).pretty_print
+		instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
+		task = instance.task_manager.task_by_name(name)
+
+		puts Terminal::Table.new :title => 'Task overview', :rows => [
+				['Name', task.name],
+				['Description', task.desc],
+				['Scope', task.scope],
+				['Visibility', task.visibility],
+			]
 	end
 
 	desc "chains [STAGE]", "List all chains for the current stage"
 	method_options :stage => :string
 	def chains(stage)
-		instance = Avocado::Bootstrap.run(stage, options[:verbose], options[:debug])
+		instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
 		
 		instance.task_manager.chains.each do |chain|
 			rows = []
@@ -94,7 +96,7 @@ class AvocadoCli < Thor
 
 	desc "stages", "List all stages"
 	def stages
-		instance = Avocado::Bootstrap.run(:default, options[:verbose], options[:debug])
+		instance = AvoDeploy::Bootstrap.run(:default, options[:verbose], options[:debug])
 
 		puts Terminal::Table.new :title => "Stages list", 
 								 :headings => ['Title', 'Description'], 
@@ -120,7 +122,7 @@ class AvocadoCli < Thor
 		}
 
 		require 'erb'
-		renderer = ERB.new(File.new(File.dirname(THIS_FILE) + '/../lib/avocado/skel/manifest_template.rb.erb').read)
+		renderer = ERB.new(File.new(File.dirname(THIS_FILE) + '/../lib/avodeploy/skel/manifest_template.rb.erb').read)
 		output = renderer.result(binding)
 
 		File.write(Dir.pwd.concat('/Avofile'), output)

@@ -16,18 +16,20 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-module Avocado
+module AvoDeploy
 	class Config
 
 		attr_reader :config
 		attr_reader :stages
 		attr_reader :targets
+		attr_reader :loaded_stage
 
 		# Intializes the config object
 		def initialize
 			@config = setup_config_defaults
 			@stages = {}
 			@targets = {}
+			@loaded_stage = nil
 		end
 
 		# Sets a configuration item
@@ -54,7 +56,7 @@ module Avocado
 		# @param options [Hash] task options
 		# @param block [Block] the code to be executed when the task is started 
 		def task(name, options = {}, &block)
-			Avocado::Deployment.instance.task_manager.add_task(name, options, &block)
+			AvoDeploy::Deployment.instance.task_manager.add_task(name, options, &block)
 		end
 
 		# Defines a stage
@@ -64,11 +66,13 @@ module Avocado
 		# @param block [Block] the stage configuration 
 		def setup_stage(name, options = {}, &block)
 			if options.has_key?(:desc)
-				stages[name] =  options[:desc]
+				stages[name] = options[:desc]
 			end
 
 			if name == get(:stage)
 				instance_eval(&block)
+
+				@loaded_stage = name
 			end
 		end
 
@@ -77,7 +81,7 @@ module Avocado
 		# @param name [Symbol] the deployment targets' name
 		# @param options [Hash] target options
 		def target(name, options = {})
-			@targets[name] = Avocado::Target.new(name, options)
+			@targets[name] = AvoDeploy::Target.new(name, options)
 		end
 
 		# Merges the configuration with another config hash

@@ -16,25 +16,6 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-module Avocado
-	class MultiIO
-    # Initializes the MultiIO with various target
-    #
-    # @param targets [Array] targets to handle
-	  def initialize(*targets)
-	     @targets = targets
-	  end
-
-    # Writes to all targets
-    # 
-    # @param args [mixed] arguments
-	  def write(*args)
-	    @targets.each {|t| t.write(*args)}
-	  end
-
-    # Closes the targets
-	  def close
-	    @targets.each(&:close)
-	  end
-	end
+module AvoDeploy
+  VERSION = "0.4.1"
 end

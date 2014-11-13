@@ -16,14 +16,11 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-Avocado::Deployment.configure do
-	
-	task :deploy, visibility: :public do
-		# stub for cli calls
+module AvoDeploy
+	class CommandExecutionResult
+		attr_accessor :stdin
+		attr_accessor :stdout
+		attr_accessor :stderr
+		attr_accessor :retval
 	end
-
-	task :check_ssh_connection, before: :deploy, scope: :remote, visibility: :private do
-		log.info "checking ssh connection"
-	end
-
 end

@@ -16,6 +16,12 @@
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 =end
 
-module Avocado
-  VERSION = "0.4"
+module AvoDeploy
+  module Task
+  	class TaskDependency
+  		attr_accessor :task_name
+  		attr_accessor :dependent_task_name
+  		attr_accessor :type
+  	end
+  end
 end

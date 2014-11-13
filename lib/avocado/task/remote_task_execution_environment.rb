@@ -87,7 +87,7 @@ module Avocado
 		# @param cmd [String] the command to execute
 		# @return [CommandExecutionResult] result of the command exection
 		def command(cmd)
-			Avocado::Deployment.instance.log.info "Executing [" + cmd.yellow + "] on remote " + get(:ssh_host).cyan
+			Avocado::Deployment.instance.log.info "Executing [" + cmd.yellow + "] on remote " + get(:name).to_s.cyan
 
 			result = Avocado::CommandExecutionResult.new
 

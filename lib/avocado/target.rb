@@ -29,6 +29,7 @@ module Avocado
 		def initialize(name, config)
 			@name = name
 			@config = default_config.merge(config)
+			@config[:name] = name
 		end
 
 		private
@@ -37,6 +38,7 @@ module Avocado
 			# @return [Hash] config defaults
 			def default_config
 				{
+					:name => '',
 					:host => nil,
 					:user => 'root',
 					:auth => :pubkey,

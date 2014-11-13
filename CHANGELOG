@@ -1,2 +1,4 @@
 0.4.1
+* Remote code execution: target name will now be displayed
+* local_copy strategy: `Avofile` is now excluded by default
 * Tasks: Default directory is now the working copy (Task usability - chdir #5)

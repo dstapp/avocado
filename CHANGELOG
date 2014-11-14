@@ -1,3 +1,6 @@
+0.4.2
+* Bugfix: Avocado cannot resolve defined stages
+
 0.4.1
 * local_copy strategy now checks, if one or more target systems are specified
 * avo now raises an error if no valid stage is selected (avo [stage] deploy does not complain if the stage does not exist #7)

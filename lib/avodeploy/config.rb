@@ -65,14 +65,16 @@ module AvoDeploy
 		# @param options [Hash] stage options
 		# @param block [Block] the stage configuration 
 		def setup_stage(name, options = {}, &block)
+			stages[name] = ''
+
 			if options.has_key?(:desc)
-				stages[name] = options[:desc]
+				stages[name] = options[:desc]	
 			end
 
-			if name == get(:stage)
-				instance_eval(&block)
-
+			if name.to_s == get(:stage).to_s
 				@loaded_stage = name
+				
+				instance_eval(&block)
 			end
 		end
 

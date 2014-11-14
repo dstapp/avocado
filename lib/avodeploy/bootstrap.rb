@@ -53,11 +53,6 @@ module AvoDeploy
 					# error not neccessary because dependencies are not loaded
 				end
 
-				# requested stage was not found
-				if instance.config.loaded_stage.nil?
-					raise ArgumentError, 'The requested stage does not exist.'
-				end
-
 				if debug
 					instance.log.level = Logger::DEBUG
 				elsif verbose
@@ -77,6 +72,11 @@ module AvoDeploy
 
 				# override again by user config to allow manipulation of tasks
 				load File.join(Dir.pwd, 'Avofile')
+
+				# requested stage was not found
+				if instance.config.loaded_stage.nil?
+					raise ArgumentError, 'The requested stage does not exist.'
+				end
 			rescue Exception => e
 				if debug
 					raise e

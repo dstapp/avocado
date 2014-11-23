@@ -1,3 +1,13 @@
+0.5
+* Ignored files are not longer deleted, but excluded while creating the deployment archive
+* Bzr SCM-Provider implemented
+* Tasks can now call other tasks using `run` or `run_nodeps`
+* Implemented `only` and `except` condition for remote hosts
+* Code reformatted, Tabs to spaces
+* Added requirement for Ruby >= 2.0 in the gemspec file
+* `local_copy_partial` strategy implemented. Just uploads files, that have changes since the last deployment
+* `inherit_strategy` implemented, allows to extend existing strategies
+
 0.4.2
 * Bugfix: Avocado cannot resolve defined stages
 

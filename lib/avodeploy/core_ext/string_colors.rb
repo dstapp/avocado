@@ -19,27 +19,27 @@
 class String
 
   # Paints the string red on CLI
-	def red
+  def red
     "\033[31m#{self}\033[0m"
   end
-	
+
   # Paints the string green on CLI
   def green
-    "\033[32m#{self}\033[0m" 
+    "\033[32m#{self}\033[0m"
   end
-	
+
   # Paints the string cyan on CLI
   def cyan
-    "\033[36m#{self}\033[0m" 
+    "\033[36m#{self}\033[0m"
   end
-	
+
   # Paints the string yellow on CLI
   def yellow
-    "\e[33m#{self}\e[0m" 
+    "\e[33m#{self}\e[0m"
   end
-	
+
   # Paints the string gray on CLI
   def gray
-    "\033[37m#{self}\033[0m" 
+    "\033[37m#{self}\033[0m"
   end
 end

@@ -17,77 +17,69 @@
 =end
 
 module AvoDeploy
-	class Bootstrap
-		# Runs the avocado bootstrap
-		#
-		# @param stage [Symbol] the stage to bootstrap
-		# @param verbose [Boolean] run in verbose mode
-		# @param debug [Boolean] run in boolean mode
-		def self.run(stage = :default, verbose = false, debug = false)
-			if stage.is_a?(String)
-				stage = stage.to_sym
-			end
+  class Bootstrap
+    # Runs the avocado bootstrap
+    #
+    # @param stage [Symbol] the stage to bootstrap
+    # @param verbose [Boolean] run in verbose mode
+    # @param debug [Boolean] run in boolean mode
+    def self.run(stage = :default, verbose = false, debug = false)
+      if stage.is_a?(String)
+        stage = stage.to_sym
+      end
 
-			begin
-				# defaults
-				AvoDeploy::Deployment.configure do
-					set :stage, stage
+      begin
+        # defaults
+        AvoDeploy::Deployment.configure do
+          set :stage, stage
 
-					setup_stage :default do
-						# a default stage is needed for some use cases,
-						# especially if you don't know which stages were defined by the user
-					end
-				end
+          setup_stage :default do
+            # a default stage is needed for some use cases,
+            # especially if you don't know which stages were defined by the user
+          end
+        end
 
-				if File.exist?(Dir.pwd.concat('/Avofile')) == false
-					raise RuntimeError, 'Could not find Avofile. Run `avo install` first.'
-				end
+        if File.exist?(Dir.pwd.concat('/Avofile')) == false
+          raise RuntimeError, 'Could not find Avofile. Run `avo install` first.'
+        end
 
-				instance = AvoDeploy::Deployment.instance
+        instance = AvoDeploy::Deployment.instance
 
-				# load user config initially to determine strategy
-				begin
-					load File.join(Dir.pwd, 'Avofile')
-				rescue RuntimeError => e
-					# `find_chain_index_containing': could not find a chain containing task create_deployment_tarball (RuntimeError)
-					# error not neccessary because dependencies are not loaded
-				end
+        # load user config initially to determine strategy
+        begin
+          load File.join(Dir.pwd, 'Avofile')
+        rescue RuntimeError => e
+          # `find_chain_index_containing': could not find a chain containing task create_deployment_tarball (RuntimeError)
+          # error not neccessary because dependencies are not loaded
+        end
 
-				if debug
-					instance.log.level = Logger::DEBUG
-				elsif verbose
-					instance.log.level = Logger::INFO
-				else
-					instance.log.level = instance.config.get(:log_level)
-				end
+        if debug
+          instance.log.level = Logger::DEBUG
+        elsif verbose
+          instance.log.level = Logger::INFO
+        else
+          instance.log.level = instance.config.get(:log_level)
+        end
 
-				instance.log.debug "Loading deployment strategy #{instance.config.get(:strategy).to_s}..."
+        instance.log.debug 'Loading user configuration...'
+        # override again by user config to allow manipulation of tasks
+        load File.join(Dir.pwd, 'Avofile')
 
-				# load strategy
-				# @todo check
-				require "avodeploy/strategy/base.rb"
-				require "avodeploy/strategy/#{instance.config.get(:strategy).to_s}.rb"
+        # requested stage was not found
+        if instance.config.loaded_stage.nil?
+          raise ArgumentError, 'The requested stage does not exist.'
+        end
+      rescue Exception => e
+        if debug
+          raise e
+        else
+          AvoDeploy::Deployment.instance.log.error e.message.red
+        end
 
-				instance.log.debug "Loading user configuration..."
+        Kernel.exit(true)
+      end
 
-				# override again by user config to allow manipulation of tasks
-				load File.join(Dir.pwd, 'Avofile')
-
-				# requested stage was not found
-				if instance.config.loaded_stage.nil?
-					raise ArgumentError, 'The requested stage does not exist.'
-				end
-			rescue Exception => e
-				if debug
-					raise e
-				else 
-					AvoDeploy::Deployment.instance.log.error e.message.red
-				end
-
-				Kernel.exit(true)
-			end
-
-			AvoDeploy::Deployment.instance
-		end
-	end
+      AvoDeploy::Deployment.instance
+    end
+  end
 end

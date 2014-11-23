@@ -17,24 +17,24 @@
 =end
 
 module AvoDeploy
-	class MultiIO
+  class MultiIO
     # Initializes the MultiIO with various target
     #
     # @param targets [Array] targets to handle
-	  def initialize(*targets)
-	     @targets = targets
-	  end
+    def initialize(*targets)
+      @targets = targets
+    end
 
     # Writes to all targets
     # 
     # @param args [mixed] arguments
-	  def write(*args)
-	    @targets.each {|t| t.write(*args)}
-	  end
+    def write(*args)
+      @targets.each { |t| t.write(*args) }
+    end
 
     # Closes the targets
-	  def close
-	    @targets.each(&:close)
-	  end
-	end
+    def close
+      @targets.each(&:close)
+    end
+  end
 end

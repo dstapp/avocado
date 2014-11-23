@@ -17,60 +17,55 @@
 =end
 
 module AvoDeploy
-	class Deployment
+  class Deployment
 
-		attr_accessor :config
-		attr_accessor :task_manager
-		attr_reader :log
-		attr_reader :log_file
+    attr_accessor :config
+    attr_accessor :task_manager
+    attr_reader :log
 
-		# Initializes the deployment
-		def initialize
-			@stages = {}
-			@task_manager = AvoDeploy::Task::TaskManager.new
-			@config = AvoDeploy::Config.new
+    # Initializes the deployment
+    def initialize
+      @stages = {}
+      @task_manager = AvoDeploy::Task::TaskManager.new
+      @config = AvoDeploy::Config.new
 
-			@log = ::Logger.new(STDOUT)
-		end
+      @log = ::Logger.new(STDOUT)
+    end
 
-		# Configures the deployment
-		#
-		# @param block [Block] configuration block
-		def self.configure(&block)
-			@instance = self.instance
-			@instance.config.instance_eval(&block)
+    # Configures the deployment
+    #
+    # @param block [Block] configuration block
+    def self.configure(&block)
+      @instance = self.instance
+      @instance.config.instance_eval(&block)
 
-			# @todo check config and throw exception
-		end
+      # @todo check config and throw exception
+    end
 
-		# Returns the deployment instance
-		#
-		# @return [Deployment] the deployment instance
-		def self.instance
-			if @instance.nil?
-				@instance = self.new
-			end
+    # Returns the deployment instance
+    #
+    # @return [Deployment] the deployment instance
+    def self.instance
+      if @instance.nil?
+        @instance = self.new
+      end
 
-			@instance
-		end
+      @instance
+    end
 
-		# Handles exceptions
-		#
-		# @param [Exception] the exception to handle
-		def handle_abort(e)
-			if e.class != SystemExit
-				@log.error e.message.red
-				@log.info "cleaning up..."
+    # Handles exceptions
+    #
+    # @param e [Exception] the exception to handle
+    def handle_abort(e)
+      if e.class != SystemExit
+        @log.error e.message.red
+        @log.info 'cleaning up...'
 
-				task_manager.invoke_task_oneshot(:cleanup_local)
+        task_manager.invoke_task_oneshot(:cleanup_local)
 
-				#if e.kind_of?(::Net::SSH::AuthenticationFailed) == false
-				#	task_manager.invoke_task_oneshot(:cleanup_remote)
-				#end
-				
-				Kernel.exit(true)
-			end
-		end
-				
-	end
+        Kernel.exit(true)
+      end
+    end
+
+  end
 end

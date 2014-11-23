@@ -17,60 +17,70 @@
 =end
 
 module AvoDeploy
-	module Task
-		class Task
+  module Task
+    class Task
 
-			attr_accessor :name
-			attr_accessor :scope
-			attr_accessor :visibility
-			attr_accessor :block
-			attr_accessor :desc
+      attr_accessor :name
+      attr_accessor :scope
+      attr_accessor :visibility
+      attr_accessor :block
+      attr_accessor :desc
+      attr_accessor :remote_only
+      attr_accessor :remote_except
 
-			# Creates a new task from a task block in the deployment configuration process
-			# 
-			# @param name [Symbol] name of the task
-			# @param options [Hash] command options
-			# @param block [Block] code block of the task
-			# @return [Task] the task instance
-			def self.from_task_block(name, options, &block)
-				instance = self.new
+      # Creates a new task from a task block in the deployment configuration process
+      #
+      # @param name [Symbol] name of the task
+      # @param options [Hash] command options
+      # @param block [Block] code block of the task
+      # @return [Task] the task instance
+      def self.from_task_block(name, options, &block)
+        instance = self.new
 
-				instance.name = name
-				instance.block = block
+        instance.name = name
+        instance.block = block
 
-				instance.scope = :local
+        instance.scope = :local
 
-				if options.has_key?(:scope) && options[:scope] == :remote
-					instance.scope = :remote
-				end
+        if options.has_key?(:scope) && options[:scope] == :remote
+          instance.scope = :remote
+        end
 
-				instance.visibility = :public
+        instance.visibility = :public
 
-				if options.has_key?(:visibility) && options[:visibility] == :private
-					instance.visibility = :private
-				end
+        if options.has_key?(:visibility) && options[:visibility] == :private
+          instance.visibility = :private
+        end
 
-				if options.has_key?(:desc)
-					instance.desc = options[:desc]
-				end
+        if options.has_key?(:desc)
+          instance.desc = options[:desc]
+        end
 
-				instance
-			end
+        if options.has_key?(:only)
+          instance.remote_only = options[:only]
+        end
 
-			# Runs the code of a task
-			#
-			# @param env [TaskExecutionEnvironment] the environment to invoke the task in
-			# @return [mixed] result of the code block
-			def invoke(env)
-				raise ArgumentError 'env must be a valid TaskExecutionEnvironment' unless env.kind_of?(TaskExecutionEnvironment)
+        if options.has_key?(:except)
+          instance.remote_except = options[:except]
+        end
 
-				avo = AvoDeploy::Deployment.instance
+        instance
+      end
 
-				avo.log.debug "Running task #{@name}"
+      # Runs the code of a task
+      #
+      # @param env [TaskExecutionEnvironment] the environment to invoke the task in
+      # @return [mixed] result of the code block
+      def invoke(env)
+        raise ArgumentError 'env must be a valid TaskExecutionEnvironment' unless env.kind_of?(TaskExecutionEnvironment)
 
-				env.instance_eval(&@block)
-			end
+        avo = AvoDeploy::Deployment.instance
 
-		end
-	end
+        avo.log.debug "Running task #{@name}"
+
+        env.instance_eval(&@block)
+      end
+
+    end
+  end
 end

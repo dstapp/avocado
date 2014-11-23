@@ -15,6 +15,7 @@ require 'avodeploy/task/remote_task_execution_environment.rb'
 
 require 'avodeploy/scm_provider/scm_provider.rb'
 require 'avodeploy/scm_provider/git_scm_provider.rb'
+require 'avodeploy/scm_provider/bzr_scm_provider.rb'
 
 require 'avodeploy/multi_io.rb'
 require 'avodeploy/command_execution_result.rb'

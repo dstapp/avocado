@@ -17,72 +17,82 @@
 =end
 
 module AvoDeploy
-	module Task
-		class TaskExecutionEnvironment
+  module Task
+    class TaskExecutionEnvironment
 
-			# Initialized the environment
-			#
-			# @param config [Hash] deployment configuration
-			def initialize(config)
-				# @todo check
-				@config = config
-			end
+      attr_accessor :scm
 
-			# Assigns the scm provider
-			#
-			# @param scm_provider [ScmProvider] the scm provider to assign
-			def scm_provider=(scm_provider)
-				@scm = scm_provider
-			end
+      # Initialized the environment
+      #
+      # @param config [Hash] deployment configuration
+      def initialize(config)
+        # @todo check
+        @config = config
+      end
 
-			# Checks, if all utilities are available for the deployment process
-			# to be executed
-			#
-			# @param utils [Array] array with utilities to check
-			def check_util_availability(utils, system_name)
-				begin
-					utils.each do |util|
-						if command("command -v #{util} >/dev/null 2>&1 || exit 1;").retval == 1
-							msg = "command line utility '#{util}' is not installed #{system_name}"
+      # Runs a task without dependencies
+      #
+      # @param task_name [Symbol] task name to execute
+      # @return [Object] the task result
+      def run_nodeps(task_name)
+        AvoDeploy::Deployment.instance.task_manager.invoke_task_oneshot(task_name)
+      end
 
-							raise RuntimeError, msg
-						end
-					end
-				rescue Exception => e
-					handle_abort e
-				end
-			end
+      # Runs a task chain
+      #
+      # @param task_name [Symbol] task name to invoke
+      def run(task_name)
+        AvoDeploy::Deployment.instance.task_manager.invoke_task_chain_containing(task_name)
+      end
 
-			# Returns the logger instance
-			# 
-			# @return [Logger] log instance
-			def log
-				AvoDeploy::Deployment.instance.log
-			end
+      # Checks, if all utilities are available for the deployment process
+      # to be executed
+      #
+      # @param utils [Array] array with utilities to check
+      def check_util_availability(utils, system_name)
+        begin
+          utils.each do |util|
+            if command("command -v #{util} >/dev/null 2>&1 || exit 1;").retval == 1
+              msg = "command line utility '#{util}' is not installed #{system_name}"
 
-			# Sets a configuration item
-			#
-			# @param key [Symbol] configuration key
-			# @param value [mixed] configuration value
-			def set(key, value)
-				@config[key] = value
-			end
+              raise RuntimeError, msg
+            end
+          end
+        rescue Exception => e
+          handle_abort e
+        end
+      end
 
-			# Returns a configuration item if set
-			#
-			# @param key [Symbol] configuration key
-			# @return [mixed] configuration value
-			def get(key)
-				@config[key]
-			end
+      # Returns the logger instance
+      #
+      # @return [Logger] log instance
+      def log
+        AvoDeploy::Deployment.instance.log
+      end
 
-			# Shorthand for exception handling
-			# 
-			# @param e [Exception] the exception to handle
-			def handle_abort(e)
-				AvoDeploy::Deployment.instance.handle_abort(e)
-			end
+      # Sets a configuration item
+      #
+      # @param key [Symbol] configuration key
+      # @param value [mixed] configuration value
+      def set(key, value)
+        @config[key] = value
+      end
 
-		end
-	end
+      # Returns a configuration item if set
+      #
+      # @param key [Symbol] configuration key
+      # @return [mixed] configuration value
+      def get(key)
+        @config[key]
+      end
+
+      # Shorthand for exception handling
+      #
+      # @param e [Exception] the exception to handle
+      def handle_abort(e)
+        AvoDeploy::Deployment.instance.handle_abort(e)
+      end
+
+    end
+  end
 end

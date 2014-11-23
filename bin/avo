@@ -25,110 +25,106 @@ require File.join(File.dirname(THIS_FILE), '../lib/avodeploy.rb')
 
 class AvocadoCli < Thor
 
-	package_name "Avocado"
+    package_name 'Avocado'
 
-	class_option :verbose, :type => :boolean, :aliases => :v
-	class_option :debug, :type => :boolean, :aliases => :d
+    class_option :verbose, :type => :boolean, :aliases => :v
+    class_option :debug, :type => :boolean, :aliases => :d
 
-	desc "start [STAGE] [TASK]", "Start a task in the specified stage"
-	method_options :stage => :string, :task => :string
-	option :nodeps, :type => :boolean, :aliases => :n
-	long_desc <<-LONGDESC
-		`avo start` will execute a chain of tasks specified in either the deployment strategy
-		or the deployment manifest (Avofile). Instead of invoking the chain with its name
-		just use the actual task you want to execute and Avocado will take care of executing the
-		right task chain for your needs.
-	LONGDESC
-	def start(stage, task)
-		instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
-		
-		if options[:nodeps]
-			instance.task_manager.invoke_task_oneshot(task)
-		else
-			instance.task_manager.invoke_task_chain_containing(task)
-		end
-	end
+    desc 'start [STAGE] [TASK]', 'Start a task in the specified stage'
+    method_options :stage => :string, :task => :string
+    option :nodeps, :type => :boolean, :aliases => :n
+    long_desc <<-LONGDESC
+        `avo start` will execute a chain of tasks specified in either the deployment strategy
+        or the deployment manifest (Avofile). Instead of invoking the chain with its name
+        just use the actual task you want to execute and Avocado will take care of executing the
+        right task chain for your needs.
+    LONGDESC
+    def start(stage, task)
+        instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
+        
+        if options[:nodeps]
+            instance.task_manager.invoke_task_oneshot(task)
+        else
+            instance.task_manager.invoke_task_chain_containing(task)
+        end
+    end
 
-	desc 'task [NAME] [--stage="[STAGE]"]', "Show more information about a specific task"
-	method_options :name => :string
-	option :stage, :type => :string, :aliases => :s
-	def task(name)
-		if options[:stage].nil? == false
-			stage = options[:stage]
-		else
-			stage = :default
-		end
+    desc 'task [NAME] [--stage="[STAGE]"]', 'Show more information about a specific task'
+    method_options :name => :string
+    option :stage, :type => :string, :aliases => :s
+    def task(name)
+        if options[:stage].nil? == false
+            stage = options[:stage]
+        else
+            stage = :default
+        end
 
-		instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
-		task = instance.task_manager.task_by_name(name)
+        instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
+        task = instance.task_manager.task_by_name(name)
 
-		puts Terminal::Table.new :title => 'Task overview', :rows => [
-				['Name', task.name],
-				['Description', task.desc],
-				['Scope', task.scope],
-				['Visibility', task.visibility],
-			]
-	end
+        puts Terminal::Table.new :title => 'Task overview', :rows => [
+                ['Name', task.name],
+                ['Description', task.desc],
+                ['Scope', task.scope],
+                ['Visibility', task.visibility],
+            ]
+    end
 
-	desc "chains [STAGE]", "List all chains for the current stage"
-	method_options :stage => :string
-	def chains(stage)
-		instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
-		
-		instance.task_manager.chains.each do |chain|
-			rows = []
+    desc 'chains [STAGE]', 'List all chains for the current stage'
+    method_options :stage => :string
+    def chains(stage)
+        instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
+        
+        instance.task_manager.chains.each do |chain|
+            rows = []
 
-			chain.each_pair do |key, task|
-				if task.visibility = :public
-					rows << [
-						task.name,
-						task.scope,
-						task.desc
-					]
-				end
-			end
+            chain.each_pair do |key, task|
+                if task.visibility = :public
+                    rows << [
+                        task.name,
+                        task.scope,
+                        task.desc
+                    ]
+                end
+            end
 
-			puts Terminal::Table.new :title => "Chain overview", 
-									 :headings => ['Title', 'Scope', 'Description'], 
-									 :rows => rows
-		end
-	end
+            puts Terminal::Table.new :title => 'Chain overview',
+                                     :headings => ['Title', 'Scope', 'Description'], 
+                                     :rows => rows
+        end
+    end
 
-	desc "stages", "List all stages"
-	def stages
-		instance = AvoDeploy::Bootstrap.run(:default, options[:verbose], options[:debug])
+    desc 'stages', 'List all configured stages'
+    def stages
+        instance = AvoDeploy::Bootstrap.run(:default, options[:verbose], options[:debug])
 
-		puts Terminal::Table.new :title => "Stages list", 
-								 :headings => ['Title', 'Description'], 
-								 :rows => instance.config.stages
-	end
+        puts Terminal::Table.new :title => "Stages list", 
+                                 :headings => ['Title', 'Description'], 
+                                 :rows => instance.config.stages
+    end
 
-	desc "install [--stages=staging,qa,production]", "Creates a Avofile in your project directory"
-	option :stages, :type => :string
-	def install
-		if File.exist?(Dir.pwd.concat('/Avofile'))
-			puts 'The Avofile does already exist. No need to create a new one.'
-			Kernel.exit(true)
-		end
+    desc 'install [--stages=staging,qa,production]', 'Creates a Avofile in your project directory'
+    option :stages, :type => :string
+    def install
+        if File.exist?(Dir.pwd.concat('/Avofile'))
+            puts 'The Avofile does already exist. No need to create a new one.'
+            Kernel.exit(true)
+        end
 
-		stages = [ 'staging', 'production' ]
+        stages = %w('staging' 'production')
 
-		if options[:stages].nil? == false
-			stages = options[:stages].split(',')
-		end
+        if options[:stages].nil? == false
+            stages = options[:stages].split(',')
+        end
 
-		data = {
-			:stages => stages,
-		}
+        require 'erb'
+        renderer = ERB.new(File.new(File.dirname(THIS_FILE) + '/../lib/avodeploy/skel/manifest_template.rb.erb').read)
+        output = renderer.result(binding)
 
-		require 'erb'
-		renderer = ERB.new(File.new(File.dirname(THIS_FILE) + '/../lib/avodeploy/skel/manifest_template.rb.erb').read)
-		output = renderer.result(binding)
+        File.write(Dir.pwd.concat('/Avofile'), output)
 
-		File.write(Dir.pwd.concat('/Avofile'), output)
-
-		puts 'The deployment manifest file called `Avofile` has been created in the current directory.'
-	end
+        puts 'The deployment manifest file called `Avofile` has been created in the current directory.'
+    end
 
 end
 

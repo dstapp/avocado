@@ -18,10 +18,10 @@
 
 module AvoDeploy
   module Task
-  	class TaskDependency
-  		attr_accessor :task_name
-  		attr_accessor :dependent_task_name
-  		attr_accessor :type
-  	end
+    class TaskDependency
+      attr_accessor :task_name
+      attr_accessor :dependent_task_name
+      attr_accessor :type
+    end
   end
 end

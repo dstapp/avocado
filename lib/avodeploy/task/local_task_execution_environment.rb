@@ -116,7 +116,7 @@ module AvoDeploy
             log.debug 'Stderr: ' + result.stderr.red
           end
 
-          log.debug 'Retval: ' + result.retval
+          log.debug 'Retval: ' + result.retval.to_s
         rescue Exception => e
           handle_abort e
         end

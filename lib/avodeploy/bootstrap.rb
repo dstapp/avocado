@@ -70,11 +70,11 @@ module AvoDeploy
           raise ArgumentError, 'The requested stage does not exist.'
         end
       rescue Exception => e
-        if debug
+        #if debug
           raise e
-        else
-          AvoDeploy::Deployment.instance.log.error e.message.red
-        end
+        #else
+        #  AvoDeploy::Deployment.instance.log.error e.message.red
+        #end
 
         Kernel.exit(true)
       end

@@ -28,7 +28,7 @@ AvoDeploy::Deployment.configure do
     check_util_availability ['tar'].concat(@scm.cli_utils)
   end
 
-  task :check_remote_system, before: :deploy do
+  task :check_remote_system, before: :deploy, scope: :remote do
     res = command 'uname -a'
 
     if res.stdout.include?('Linux') == false
@@ -71,7 +71,7 @@ AvoDeploy::Deployment.configure do
     exclude_param = ''
 
     files_to_delete.each do |file|
-      exclude_param += " --exclude=#{file}"
+      exclude_param += " --exclude='^#{file}$'"
     end
 
     command "tar cfz ../deploy.tar.gz #{exclude_param} ."

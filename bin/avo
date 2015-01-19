@@ -33,6 +33,7 @@ class AvocadoCli < Thor
     desc 'start [STAGE] [TASK]', 'Start a task in the specified stage'
     method_options :stage => :string, :task => :string
     option :nodeps, :type => :boolean, :aliases => :n
+    option :tag, :type => :string, :aliases => :t
     long_desc <<-LONGDESC
         `avo start` will execute a chain of tasks specified in either the deployment strategy
         or the deployment manifest (Avofile). Instead of invoking the chain with its name
@@ -43,9 +44,9 @@ class AvocadoCli < Thor
         instance = AvoDeploy::Bootstrap.run(stage, options[:verbose], options[:debug])
         
         if options[:nodeps]
-            instance.task_manager.invoke_task_oneshot(task)
+            instance.task_manager.invoke_task_oneshot(task, options)
         else
-            instance.task_manager.invoke_task_chain_containing(task)
+            instance.task_manager.invoke_task_chain_containing(task, options)
         end
     end
 

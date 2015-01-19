@@ -32,9 +32,12 @@ module AvoDeploy
       # @param url [String] the repository location
       # @param local_dir [String] path to the working copy
       # @param branch [String] the branch to check out
-      def checkout_from_remote(url, local_dir, branch)
+      # @param tag [String] tag to check out
+      def checkout_from_remote(url, local_dir, branch, tag = nil)
         res = @env.command("git clone #{url} #{local_dir}")
         raise RuntimeError, "Could not clone from git url #{url}" unless res.retval == 0
+
+        branch = tag if tag.nil? == false
 
         @env.chdir(local_dir)
         res = @env.command("git checkout #{branch}")

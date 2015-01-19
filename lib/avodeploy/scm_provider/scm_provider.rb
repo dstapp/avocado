@@ -35,7 +35,8 @@ module AvoDeploy
       # @param url [String] the repository location
       # @param local_dir [String] path to the working copy
       # @param branch [String] the branch to check out
-      def checkout_from_remote(url, local_dir, branch)
+      # @param tag [String] tag to check out
+      def checkout_from_remote(url, local_dir, branch, tag = nil)
         raise NotImplementedError
       end
 

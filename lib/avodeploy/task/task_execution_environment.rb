@@ -21,6 +21,7 @@ module AvoDeploy
     class TaskExecutionEnvironment
 
       attr_accessor :scm
+      attr_accessor :options
 
       # Initialized the environment
       #

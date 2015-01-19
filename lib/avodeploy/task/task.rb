@@ -70,8 +70,9 @@ module AvoDeploy
       # Runs the code of a task
       #
       # @param env [TaskExecutionEnvironment] the environment to invoke the task in
+      # @param options [Hash] a hash contining additional options
       # @return [mixed] result of the code block
-      def invoke(env)
+      def invoke(env, options = {})
         raise ArgumentError 'env must be a valid TaskExecutionEnvironment' unless env.kind_of?(TaskExecutionEnvironment)
 
         avo = AvoDeploy::Deployment.instance

@@ -32,8 +32,15 @@ module AvoDeploy
       # @param url [String] the repository location
       # @param local_dir [String] path to the working copy
       # @param branch [String] the branch to check out, not used here because branches are encoded in the bazaar urls
-      def checkout_from_remote(url, local_dir, branch)
-        res = @env.command("bzr co --lightweight #{url} #{local_dir}")
+      # @param tag [String] tag to check out
+      def checkout_from_remote(url, local_dir, branch, tag = nil)
+        cmd = "bzr co --lightweight #{url} #{local_dir}"
+
+        if tag.nil? == false
+          cmd += " -r tag:#{tag}"
+        end
+
+        res = @env.command(cmd)
         raise RuntimeError, "Could not checkout from bzr url #{url}" unless res.retval == 0
       end
 

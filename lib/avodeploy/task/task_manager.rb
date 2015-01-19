@@ -94,13 +94,14 @@ module AvoDeploy
       # Invokes a task without dependencies
       #
       # @param task_name [Symbol] the task name
-      def invoke_task_oneshot(task_name)
+      # @param options [Hash] a hash contining additional options
+      def invoke_task_oneshot(task_name, options = {})
         task_name = task_name.to_sym if task_name.is_a?(String)
 
         cidx = find_chain_index_containing(task_name)
 
         begin
-          invoke_task(@chains[cidx][task_name])
+          invoke_task(@chains[cidx][task_name], options)
         rescue Exception => e
           AvoDeploy::Deployment.instance.handle_abort(e)
         end
@@ -109,14 +110,15 @@ module AvoDeploy
       # Invokes the task chain, that contains the requested task
       #
       # @param task_name [Symbol] the task name
-      def invoke_task_chain_containing(task_name)
+      # @param options [Hash] a hash contining additional options
+      def invoke_task_chain_containing(task_name, options = {})
         task_name = task_name.to_sym if task_name.is_a?(String)
 
         cidx = find_chain_index_containing(task_name)
 
         begin
           @chains[cidx].each_pair do |name, task|
-            invoke_task(task)
+            invoke_task(task, options)
           end
         rescue Exception => e
           AvoDeploy::Deployment.instance.handle_abort(e)
@@ -152,7 +154,8 @@ module AvoDeploy
       # Invokes a task
       #
       # @param task [Task] the task
-      def invoke_task(task)
+      # @param options [Hash] a hash contining additional options
+      def invoke_task(task, options = {})
         raise ArgumentError, 'task must be a task' unless task.kind_of?(Task)
 
         avo = AvoDeploy::Deployment.instance
@@ -185,6 +188,10 @@ module AvoDeploy
 
         if env.scm.nil?
           raise RuntimeError, 'No ScmProvider was instantiated'
+        end
+
+        if options.empty? == false
+          env.options = options
         end
 
         # if remote task -> execute for each target

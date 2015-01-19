@@ -50,7 +50,7 @@ AvoDeploy::Deployment.configure do
   end
 
   task :checkout_from_scm, after: :switch_to_temp_dir do
-    @scm.checkout_from_remote(get(:repo_url), 'working-copy', get(:branch))
+    @scm.checkout_from_remote(get(:repo_url), 'working-copy', get(:branch), @options[:tag])
   end
 
   task :chdir_to_working_copy, after: :checkout_from_scm do

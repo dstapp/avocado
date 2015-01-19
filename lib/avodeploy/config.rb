@@ -132,6 +132,7 @@ module AvoDeploy
           :strategy => nil,
           :ignore_files => [],
           :log_level => Logger::WARN,
+          :force_tag => false,
       }
     end
 

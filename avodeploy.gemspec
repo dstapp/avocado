@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'avodeploy'
   spec.version       = AvoDeploy::VERSION
   spec.authors       = ['David Prandzioch']
-  spec.email         = ['dprandzioch@me.com']
+  spec.email         = ['kontakt@davidprandzioch.de']
   spec.summary       = %q{Avocado is a flexible deployment framework for web applications.}
   spec.description   = ''
   spec.homepage      = 'http://dprandzioch.github.io/avocado/'

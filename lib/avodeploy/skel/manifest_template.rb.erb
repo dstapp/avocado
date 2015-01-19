@@ -106,7 +106,7 @@ AvoDeploy::Deployment.configure do
     # ==================== STAGES CONFIGURATION =======================
 
     <% stages.each do |stage| %>
-    setup_stage <%= stage %>, desc: "Configuration for <%= stage %>" do
+    setup_stage :<%= stage %>, desc: "Configuration for '<%= stage %>'" do
         # In this section you can overwrite every configuration choice
         # you have made above. You can define additional tasks, that
         # are only usable within the current scope or change the

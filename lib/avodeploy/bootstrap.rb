@@ -45,20 +45,20 @@ module AvoDeploy
 
         instance = AvoDeploy::Deployment.instance
 
-        # load user config initially to determine strategy
-        begin
-          load File.join(Dir.pwd, 'Avofile')
-        rescue RuntimeError => e
-          # `find_chain_index_containing': could not find a chain containing task create_deployment_tarball (RuntimeError)
-          # error not neccessary because dependencies are not loaded
-        end
-
         if debug
           instance.log.level = Logger::DEBUG
         elsif verbose
           instance.log.level = Logger::INFO
         else
           instance.log.level = instance.config.get(:log_level)
+        end
+
+        # load user config initially to determine strategy
+        begin
+          load File.join(Dir.pwd, 'Avofile')
+        rescue RuntimeError => e
+          # `find_chain_index_containing': could not find a chain containing task create_deployment_tarball (RuntimeError)
+          # error not neccessary because dependencies are not loaded
         end
 
         instance.log.debug 'Loading user configuration...'

@@ -111,7 +111,7 @@ class AvocadoCli < Thor
             Kernel.exit(true)
         end
 
-        stages = %w('staging' 'production')
+        stages = %w(staging production)
 
         if options[:stages].nil? == false
             stages = options[:stages].split(',')

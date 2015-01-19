@@ -1,117 +1,128 @@
 AvoDeploy::Deployment.configure do
-	
-	# AVOCADO
-	# The flexible and easy to use deployment framework for web applications
-	# 
-	# Welcome to your deployment manifest. Here you can configure the
-	# whole deployment process of your application to various target systems.
-	# This is a example file that has been created by `avo install`.
-	# While you are presented with the common configuration options for
-	# most common use cases, there are plenty more available and you might want
-	# to check them out. Because of the fact, that, currently, there is no
-	# official documentation, you have to lookup all the configuration options
-	# right in the applications' source code. But don't be afraid, you'll find
-	# them all in one place. Just take a look in the `config.rb` file at the
-	# method called `setup_config_defaults`.
-	#
 
-	# =============== GENERAL PROJECT CONFIGURATION ==================
-	# Set your project name here. This is not used right now but may
-	# be used for various purposes in future releases.
-	# 
-	set :project_name, 'myproject'
+    # AVOCADO
+    # The flexible and easy to use deployment framework for web applications
+    #
+    # Welcome to your deployment manifest. Here you can configure the
+    # whole deployment process of your application to various target systems.
+    # This is a example file that has been created by `avo install`.
+    # While you are presented with the common configuration options for
+    # most common use cases, there are plenty more available and you might want
+    # to check them out. Because of the fact, that, currently, there is no
+    # official documentation, you have to lookup all the configuration options
+    # right in the applications' source code. But don't be afraid, you'll find
+    # them all in one place. Just take a look in the `config.rb` file at the
+    # method called `setup_config_defaults`.
+    #
 
-	# ===================== SCM CONFIGURATION ========================
-	# Configure the version control software you use for your project.
-	# Currently the only supported provider is Git, but this will change
-	# in the future.
-	# 
-	# Valid options:
-	#	:git
-	# 
-	set :scm, :git
+    # =============== GENERAL PROJECT CONFIGURATION ==================
+    # Set your project name here. This is not used right now but may
+    # be used for various purposes in future releases.
+    #
+    set :project_name, 'myproject'
 
-	# This is your repository url in the following format:
-	#	username@host:repository
-	# 
-	set :repo_url, 'foo@github.com:foo/myproject.git'
+    # ===================== SCM CONFIGURATION ========================
+    # Configure the version control software you use for your project.
+    # Currently only Git and Bazaar are supported, but this will change
+    # in the future.
+    #
+    # Valid options:
+    #   :git
+    #   :bzr
+    #
+    set :scm, :git
 
-	# Specify the branch you'd like to deploy here. By default this is
-	# set to :master but could be every branch you wish. If your branch
-	# name contains special characters like slashes, just use a
-	# string rather than a symbol.
-	#
-	# Examples:
-	#	:master
-	#	:develop
-	#	'feature/AVO-123_manifest'
-	#
-	set :branch, :master
+    # This is your repository url
+    #
+    set :repo_url, 'foo@github.com:foo/myproject.git'
 
-	# ==================== DEPLOYMENT STRATEGY =======================
-	# Set your deployment strategy here. Currently only `local_copy`
-	# is implemented. The additional configuration values depend on
-	# the selected strategy.
-	#
-	# `local_copy`: Files are checked out of version control into a
-	# 			    local directory, eventually preprocess and then
-	#				packed (tarball), uploaded (via scp) and unpacked
-	#				on the target system.
-	#
-	# Valid options:
-	#	: local_copy
-	#
-	set :strategy, :local_copy
+    # Specify the branch you'd like to deploy here. By default this is
+    # set to :master but could be every branch you wish. If your branch
+    # name contains special characters like slashes, just use a
+    # string rather than a symbol.
+    #
+    # Examples:
+    #   :master
+    #   :develop
+    #   'feature/AVO-123_manifest'
+    #
+    set :branch, :master
 
-	# Files to be ignored for the deployment process. Those files will
-	# not be overwritten on the target system
-	#
-	set :ignore_files, [ '.htaccess' ]
+    # ==================== DEPLOYMENT STRATEGY =======================
+    # Set your deployment strategy here. Currently only `local_copy`
+    # is implemented. The additional configuration values depend on
+    # the selected strategy.
+    #
+    # >= 0.5: To use multiple strategies, use
+    #         `inherit_strategy :local_copy
+    #          inherit_strategy :some_other_strategy`
+    #
+    # `local_copy`: Files are checked out of version control into a
+    #               local directory, eventually preprocess and then
+    #               packed (tarball), uploaded (via scp) and unpacked
+    #               on the target system.
+    #
+    # `local_copy_partial`: Same as `local_copy` but uploads only files
+    #                       that have changed since the last deployment
+    #                       to the specific target system.
+    #
+    # Valid options:
+    #   :local_copy
+    #   :local_copy_partial
+    #
+    set :strategy, :local_copy
 
-	# ================= ADDITIONAL TASK DEFINITION ====================
-	# Avocado consists of a task system. Every step that is done while
-	# the deployment process is represented as a task definition.
-	# Due to the fact that most of the tasks depend on each other
-	# tasks can be related into a chain of tasks. When you call a task
-	# from the CLI utility, the whole chain for this task will be executed.
-	# This is a powerful tool for you to customize the deployment process
-	# for your needs. A full list of which tasks are defined and where you
-	# can hook on to do this or that can be found in the definition of each
-	# strategy in the `strategy/` directory.
-	#
-	# A basic task definition can look like that:
-	#
-	#	task :do_that do
-	#		command "echo 'foo'"
-	#	end
-	#
-	# This task has no relations and therefore has to be called directly via
-	# the CLI interface. When you call `avo start staging do_that` this task
-	# would execute the command `echo 'foo'` LOCALLY, because no `scope` is defined.
-	# Take a look at the following code to see a fully featured example in action.
-	# 
-	# task :install_composer, before: :create_deployment_tarball, scope: :local, desc: "installs the composer" do
-	# 	command "php composer.phar install"
-	# end 
+    # Files to be ignored for the deployment process. Those files will
+    # not be overwritten on the target system
+    #
+    set :ignore_files, ['.htaccess']
 
-	# ==================== STAGES CONFIGURATION =======================
-	<% stages.each do |stage| %>
-	setup_stage :<%= stage %>, desc: "Configuration for <%= stage %>" do
-		# In this section you can overwrite every configuration choice
-		# you have made above. You can define additional tasks, that
-		# are only usable within the current scope or change the
-		# repository url or branch for your current needs.
-		#
+    # ================= ADDITIONAL TASK DEFINITION ====================
+    # Avocado consists of a task system. Every step that is done while
+    # the deployment process is represented as a task definition.
+    # Due to the fact that most of the tasks depend on each other
+    # tasks can be related into a chain of tasks. When you call a task
+    # from the CLI utility, the whole chain for this task will be executed.
+    # This is a powerful tool for you to customize the deployment process
+    # for your needs. A full list of which tasks are defined and where you
+    # can hook on to do this or that can be found in the definition of each
+    # strategy in the `strategy/` directory.
+    #
+    # A basic task definition can look like that:
+    #
+    #   task :do_that do
+    #       command "echo 'foo'"
+    #   end
+    #
+    # This task has no relations and therefore has to be called directly via
+    # the CLI interface. When you call `avo start staging do_that` this task
+    # would execute the command `echo 'foo'` LOCALLY, because no `scope` is defined.
+    # Take a look at the following code to see a fully featured example in action.
+    #
+    # task :install_composer, before: :create_deployment_tarball, scope: :local, desc: "installs the composer" do
+    #     command "php composer.phar install"
+    # end
 
-		# ============== TARGET SYSTEM CONFIGURATION =================
-		# Files are transmitted over SCP. Therefore you must configure 
-		# your target systems' SSH access credentials.
-		#
+    # ==================== STAGES CONFIGURATION =======================
 
-		# Currently only pubkey-auth is supported
-		#
-		target :web, host: 'my.host.tld', user: 'deploy', auth: :pubkey, deploy_dir: '/var/www/staging/'
-	end
-	<% end %>
-	
+    <% stages.each do |stage| %>
+    setup_stage :<%= stage %>, desc: "Configuration for '<%= stage %>'" do
+        # In this section you can overwrite every configuration choice
+        # you have made above. You can define additional tasks, that
+        # are only usable within the current scope or change the
+        # repository url or branch for your current needs.
+        #
+
+        # ============== TARGET SYSTEM CONFIGURATION =================
+        # Files are transmitted over SCP. Therefore you must configure
+        # your target systems' SSH access credentials.
+        #
+
+        # Currently only pubkey-auth is supported
+        #
+        target :web, host: 'my.host.tld', port: 22, user: 'deploy', auth: :pubkey, deploy_dir: '/var/www/staging/'
+    end
+    <% end %>
+
+
 end

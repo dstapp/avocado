@@ -17,10 +17,10 @@
 =end
 
 module AvoDeploy
-	class CommandExecutionResult
-		attr_accessor :stdin
-		attr_accessor :stdout
-		attr_accessor :stderr
-		attr_accessor :retval
-	end
+  class CommandExecutionResult
+    attr_accessor :stdin
+    attr_accessor :stdout
+    attr_accessor :stderr
+    attr_accessor :retval
+  end
 end

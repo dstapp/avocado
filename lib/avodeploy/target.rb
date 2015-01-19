@@ -17,35 +17,36 @@
 =end
 
 module AvoDeploy
-	class Target
+  class Target
 
-		attr_reader :name
-		attr_reader :config
+    attr_reader :name
+    attr_reader :config
 
-		# Initializes the deployment target
-		# 
-		# @param name [Symbol] target name
-		# @param config [Hash] target config
-		def initialize(name, config)
-			@name = name
-			@config = default_config.merge(config)
-			@config[:name] = name
-		end
+    # Initializes the deployment target
+    #
+    # @param name [Symbol] target name
+    # @param config [Hash] target config
+    def initialize(name, config)
+      @name = name
+      @config = default_config.merge(config)
+      @config[:name] = name
+    end
 
-		private
-			# Sets up the config defaults
-			#
-			# @return [Hash] config defaults
-			def default_config
-				{
-					:name => '',
-					:host => nil,
-					:user => 'root',
-					:auth => :pubkey,
-					:deploy_dir => '/var/www/',
-					:log_file => '/var/www/deploy.log',
-				}
-			end
+    private
+    # Sets up the config defaults
+    #
+    # @return [Hash] config defaults
+    def default_config
+      {
+          :name => '',
+          :host => nil,
+          :port => 22,
+          :user => 'root',
+          :auth => :pubkey,
+          :deploy_dir => '/var/www/',
+          :log_file => '/var/www/deploy.log',
+      }
+    end
 
-	end
+  end
 end

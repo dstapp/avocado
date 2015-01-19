@@ -17,13 +17,13 @@
 =end
 
 AvoDeploy::Deployment.configure do
-	
-	task :deploy, visibility: :public do
-		# stub for cli calls
-	end
 
-	task :check_ssh_connection, before: :deploy, scope: :remote, visibility: :private do
-		log.info "checking ssh connection"
-	end
+  task :deploy, visibility: :public do
+    # stub for cli calls
+  end
+
+  task :check_ssh_connection, before: :deploy, scope: :remote, visibility: :private do
+    log.info 'checking ssh connection'
+  end
 
 end

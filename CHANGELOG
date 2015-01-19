@@ -1,11 +1,21 @@
 0.5
+
+* avo cli command is now verbose by default
+* Optimized various log levels
+* SSH connections time out after 30 seconds
+* Bugfix: tar exclude now uses regular expressions, matching only strict definitions
+* Configuration option `force_tag` allows to enforce tag deployments (#20)
+* The `-t` / `--tag` parameter allows deployment of tags (#17)
+* Configuration option `setup_stage` now uses symbols for names by default (#15)
+* `avo -v` does not longer show debug output (#16)
+* Target configuration option `port` allows usage of non-standard ssh ports (#19)
 * Ignored files are not longer deleted, but excluded while creating the deployment archive
 * Bzr SCM-Provider implemented
 * Tasks can now call other tasks using `run` or `run_nodeps`
 * Implemented `only` and `except` condition for remote hosts
 * Code reformatted, Tabs to spaces
 * Added requirement for Ruby >= 2.0 in the gemspec file
-* `local_copy_partial` strategy implemented. Just uploads files, that have changes since the last deployment
+* `local_copy_partial` strategy implemented. Just uploads files, that have changes since the last deployment + untracked files
 * `inherit_strategy` implemented, allows to extend existing strategies
 
 0.4.2

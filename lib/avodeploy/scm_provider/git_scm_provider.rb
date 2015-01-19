@@ -51,7 +51,6 @@ module AvoDeploy
       # @return [String] the current revision of the working copy
       def revision
         res = @env.command('git rev-parse HEAD')
-
         res.stdout.gsub("\n", '')
       end
 
@@ -64,7 +63,15 @@ module AvoDeploy
       # @return [Array]
       def diff_files_between_revisions(rev1, rev2)
         res = @env.command("git diff --name-only #{rev1} #{rev2}")
+        res.stdout.lines
+      end
 
+      # Finds files unknown file in the working directory and returns them
+      # as a array
+      #
+      # @return [Array]
+      def unknown_files_in_workdir
+        res = @env.command("git status -s | grep '^??' | awk '/^?? (.*)$/ {print $2}'")
         res.stdout.lines
       end
 
@@ -79,7 +86,7 @@ module AvoDeploy
       #
       # @return [Array] array of utilities
       def cli_utils
-        ['git']
+        ['git', 'awk', 'grep']
       end
 
     end

@@ -51,6 +51,14 @@ module AvoDeploy
         raise NotImplementedError
       end
 
+      # Finds files unknown file in the working directory and returns them
+      # as a array
+      #
+      # @return [Array]
+      def unknown_files_in_workdir
+        raise NotImplementedError
+      end
+
       # Returns the current revision of the working copy
       #
       # @return [String] the current revision of the working copy

@@ -62,10 +62,15 @@ AvoDeploy::Deployment.configure do
         diff_files = @scm.diff_files_between_revisions(deployed_revision, new_revision)
 
         # always include the revision file
-        diff_files << 'REVISION'
+        # UPDATE: not longer needed because REVISION is in the unknown_files array anyway 
+        #diff_files << 'REVISION'
+
+        # include unknown files
+        unknown_files = @scm.unknown_files_in_workdir
 
         File.open("../files_#{target_name.to_s}.txt", 'w') do |f|
           f << diff_files.join("\n")
+          f << unknown_files.join("\n")
         end
 
         command "tar cvfz ../deploy_#{target_name.to_s}.tar.gz -T ../files_#{target_name.to_s}.txt #{exclude_param}"

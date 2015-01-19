@@ -83,6 +83,15 @@ module AvoDeploy
         files
       end
 
+      # Finds files unknown file in the working directory and returns them
+      # as a array
+      #
+      # @return [Array]
+      def unknown_files_in_workdir
+        res = @env.command("bzr status --short | grep '^? ' | awk '/^? (.*)$/ {print $2}'")
+        res.stdout.lines
+      end
+
       # Returns scm files to be executed in the deployment process
       #
       # @return [Array] array of scm control files

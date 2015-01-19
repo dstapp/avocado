@@ -69,8 +69,7 @@ AvoDeploy::Deployment.configure do
         unknown_files = @scm.unknown_files_in_workdir
 
         File.open("../files_#{target_name.to_s}.txt", 'w') do |f|
-          f << diff_files.join("\n")
-          f << unknown_files.join("\n")
+          f << diff_files.concat(unknown_files).join("\n")
         end
 
         command "tar cvfz ../deploy_#{target_name.to_s}.tar.gz -T ../files_#{target_name.to_s}.txt #{exclude_param}"

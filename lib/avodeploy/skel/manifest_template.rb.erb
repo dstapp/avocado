@@ -120,7 +120,7 @@ AvoDeploy::Deployment.configure do
 
         # Currently only pubkey-auth is supported
         #
-        target :web, host: 'my.host.tld', user: 'deploy', auth: :pubkey, deploy_dir: '/var/www/staging/'
+        target :web, host: 'my.host.tld', port: 22, user: 'deploy', auth: :pubkey, deploy_dir: '/var/www/staging/'
     end
     <% end %>
 

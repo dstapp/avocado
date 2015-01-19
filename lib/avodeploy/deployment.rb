@@ -57,17 +57,16 @@ module AvoDeploy
     #
     # @param e [Exception] the exception to handle
     def handle_abort(e)
-      raise e
-      Kernel.exit(true)
+      if log.level == ::Logger::DEBUG
+        raise e
+      elsif e.class != SystemExit
+        @log.error e.message.red
+        @log.info 'cleaning up...'
 
-      if e.class != SystemExit
-        #@log.error e.message.red
-        #@log.info 'cleaning up...'
-
-        #task_manager.invoke_task_oneshot(:cleanup_local)
-
-        Kernel.exit(true)
+        task_manager.invoke_task_oneshot(:cleanup_local)
       end
+      
+      Kernel.exit(true)
     end
 
   end

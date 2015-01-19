@@ -73,7 +73,10 @@ module AvoDeploy
 
         Net::SSH.start(
             target.config[:host],
-            target.config[:user]
+            target.config[:user],
+            {
+              :port => target.config[:port]
+            }
         ) do |session|
           session.scp.upload!(file, remote, :recursive => true) do |ch, name, sent, total|
             percentage = 0

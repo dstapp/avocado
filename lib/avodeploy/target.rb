@@ -40,6 +40,7 @@ module AvoDeploy
       {
           :name => '',
           :host => nil,
+          :port => 22,
           :user => 'root',
           :auth => :pubkey,
           :deploy_dir => '/var/www/',

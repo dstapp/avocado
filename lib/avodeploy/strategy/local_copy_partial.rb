@@ -56,7 +56,7 @@ AvoDeploy::Deployment.configure do
       # create deployment archive
       if deployed_revision.nil?
         # create full deployment archive
-        command "tar cvfz ../deploy_#{target_name.to_s}.tar.gz ."
+        command "tar -czvf ../deploy_#{target_name.to_s}.tar.gz #{exclude_param} ."
       else
         # create partial deployment archive
         diff_files = @scm.diff_files_between_revisions(deployed_revision, new_revision)

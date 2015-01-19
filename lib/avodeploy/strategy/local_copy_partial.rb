@@ -50,7 +50,7 @@ AvoDeploy::Deployment.configure do
       exclude_param = ''
 
       files_to_delete.each do |file|
-        exclude_param += " --exclude=#{file}"
+        exclude_param += " --exclude='^#{file}$'"
       end
 
       # create deployment archive

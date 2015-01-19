@@ -24,7 +24,7 @@ module AvoDeploy
 
       # Creates a connection between the local and the remote system over ssh
       def establish_connection
-        AvoDeploy::Deployment.instance.log.info "connecting to #{get(:user)}@#{get(:host)}..."
+        AvoDeploy::Deployment.instance.log.debug "connecting to #{get(:user)}@#{get(:host)}..."
 
         begin
           @session = ::Net::SSH.start(get(:host), get(:user), port: get(:port), timeout: 30)

@@ -50,11 +50,17 @@ AvoDeploy::Deployment.configure do
   end
 
   task :checkout_from_scm, after: :switch_to_temp_dir do
-    if get(:force_tag) && @options[:tag].nil?
+    tag = nil
+
+    if @options.nil? == false && @options[:tag].nil? == false
+      tag = @options[:tag]
+    end
+
+    if get(:force_tag) && tag.nil?
       raise RuntimeError, 'Deployment requires a tag but none was submitted'
     end
 
-    @scm.checkout_from_remote(get(:repo_url), 'working-copy', get(:branch), @options[:tag])
+    @scm.checkout_from_remote(get(:repo_url), 'working-copy', get(:branch), tag)
   end
 
   task :chdir_to_working_copy, after: :checkout_from_scm do

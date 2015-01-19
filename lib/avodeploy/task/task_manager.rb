@@ -142,7 +142,7 @@ module AvoDeploy
           # 'except' check
           next if task.remote_except.nil? == false && ((task.remote_except.is_a?(Array) && task.remote_except.include?(target.name)) || (task.remote_except.is_a?(Symbol) && task.remote_except == target.name))
 
-          avo.log.info "invoking task #{task.name} for target #{target.name}..."
+          avo.log.debug "invoking task #{task.name} for target #{target.name}..."
 
           env.config.merge!(target.config)
           env.establish_connection

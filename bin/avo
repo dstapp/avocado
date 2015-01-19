@@ -27,7 +27,7 @@ class AvocadoCli < Thor
 
     package_name 'Avocado'
 
-    class_option :verbose, :type => :boolean, :aliases => :v
+    class_option :verbose, :type => :boolean, :aliases => :v, :default => true
     class_option :debug, :type => :boolean, :aliases => :d
 
     desc 'start [STAGE] [TASK]', 'Start a task in the specified stage'

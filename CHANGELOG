@@ -1,4 +1,6 @@
 0.6
+* Experimental os x target support (set AvoDeploy::AVO_ENABLE_OSX_TARGETS to true)
+* VCS control files are now being ignored recursively
 * Implemented "version" command
 
 0.5

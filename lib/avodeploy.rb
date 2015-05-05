@@ -28,4 +28,6 @@ require 'avodeploy/bootstrap.rb'
 module AvoDeploy
   LIBNAME = 'avodeploy'
   LIBDIR = File.expand_path("../#{LIBNAME}", __FILE__)
+
+  AVO_ENABLE_OSX_TARGETS = false
 end

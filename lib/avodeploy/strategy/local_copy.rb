@@ -31,7 +31,7 @@ AvoDeploy::Deployment.configure do
   task :check_remote_system, before: :deploy, scope: :remote do
     res = command 'uname -a'
 
-    if res.stdout.include?('Linux') == false
+    if res.stdout.include?('Linux') == false && AvoDeploy::AVO_ENABLE_OSX_TARGETS == false
       raise RuntimeError, 'Only linux target systems are supported right now.'
     end
 
@@ -76,10 +76,16 @@ AvoDeploy::Deployment.configure do
   end
 
   task :create_deployment_tarball, after: :create_revision_file do
-    files_to_delete = ['Avofile'].concat(get(:ignore_files)).concat(@scm.scm_files)
+    files_to_delete = ['Avofile'].concat(get(:ignore_files))
 
     exclude_param = ''
 
+    # scm files are ignored globally
+    @scm.scm_files.each do |file|
+      exclude_param += " --exclude='#{file}'"
+    end
+
+    # all other files must be absolute
     files_to_delete.each do |file|
       exclude_param += " --exclude='^#{file}$'"
     end

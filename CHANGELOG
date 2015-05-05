@@ -1,5 +1,7 @@
-0.5
+0.6
+* Implemented "version" command
 
+0.5
 * avo cli command is now verbose by default
 * Optimized various log levels
 * SSH connections time out after 30 seconds

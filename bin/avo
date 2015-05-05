@@ -127,6 +127,12 @@ class AvocadoCli < Thor
         puts 'The deployment manifest file called `Avofile` has been created in the current directory.'
     end
 
+  desc 'version', 'Prints versioning information'
+  def version
+    puts "Avocado: #{AvoDeploy::VERSION}"
+    puts "Ruby: #{RUBY_VERSION}"
+  end
+
 end
 
 AvocadoCli.start(ARGV)

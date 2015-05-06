@@ -1,4 +1,6 @@
 0.6
+* Turned off password auth completely (publickey and hostbased only)
+* Logging to STDOUT and avodeploy.log in the current pwd simultaneously
 * Experimental os x target support (set AvoDeploy::AVO_ENABLE_OSX_TARGETS to true)
 * VCS control files are now being ignored recursively
 * Implemented "version" command

@@ -29,7 +29,8 @@ module AvoDeploy
       @task_manager = AvoDeploy::Task::TaskManager.new
       @config = AvoDeploy::Config.new
 
-      @log = ::Logger.new(STDOUT)
+      log_file = File.open('avodeploy.log', 'a')
+      @log = ::Logger.new AvoDeploy::MultiIO.new(STDOUT, log_file)
     end
 
     # Configures the deployment

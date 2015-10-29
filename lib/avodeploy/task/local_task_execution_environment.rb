@@ -75,7 +75,8 @@ module AvoDeploy
             target.config[:host],
             target.config[:user],
             {
-              :port => target.config[:port]
+              :port => target.config[:port],
+              :auth_methods => [ 'publickey', 'hostbased' ],
             }
         ) do |session|
           session.scp.upload!(file, remote, :recursive => true) do |ch, name, sent, total|

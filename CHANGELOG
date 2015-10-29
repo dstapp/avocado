@@ -1,5 +1,11 @@
-0.5
+0.6
+* Turned off password auth completely (publickey and hostbased only)
+* Logging to STDOUT and avodeploy.log in the current pwd simultaneously
+* Experimental os x target support (set AvoDeploy::AVO_ENABLE_OSX_TARGETS to true)
+* VCS control files are now being ignored recursively
+* Implemented "version" command
 
+0.5
 * avo cli command is now verbose by default
 * Optimized various log levels
 * SSH connections time out after 30 seconds

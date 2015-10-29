@@ -17,6 +17,7 @@ require 'avodeploy/scm_provider/scm_provider.rb'
 require 'avodeploy/scm_provider/git_scm_provider.rb'
 require 'avodeploy/scm_provider/bzr_scm_provider.rb'
 
+require 'avodeploy/version.rb'
 require 'avodeploy/multi_io.rb'
 require 'avodeploy/command_execution_result.rb'
 require 'avodeploy/target.rb'
@@ -27,4 +28,6 @@ require 'avodeploy/bootstrap.rb'
 module AvoDeploy
   LIBNAME = 'avodeploy'
   LIBDIR = File.expand_path("../#{LIBNAME}", __FILE__)
+
+  AVO_ENABLE_OSX_TARGETS = false
 end

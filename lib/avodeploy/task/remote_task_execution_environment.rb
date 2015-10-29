@@ -27,7 +27,7 @@ module AvoDeploy
         AvoDeploy::Deployment.instance.log.debug "connecting to #{get(:user)}@#{get(:host)}..."
 
         begin
-          @session = ::Net::SSH.start(get(:host), get(:user), port: get(:port), timeout: 30)
+          @session = ::Net::SSH.start(get(:host), get(:user), port: get(:port), timeout: 30, auth_methods: [ 'publickey', 'hostbased' ])
         rescue ::Net::SSH::AuthenticationFailed => e
           handle_abort e
         end

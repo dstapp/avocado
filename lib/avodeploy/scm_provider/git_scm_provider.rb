@@ -55,7 +55,7 @@ module AvoDeploy
       end
 
       # Finds files that differ between two revisions and returns them
-      # as a array
+      # as an array
       #
       # @param rev1 [String] sha1
       # @param rev2 [String] sha1

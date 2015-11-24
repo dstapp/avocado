@@ -3,7 +3,7 @@ develop: ![](https://travis-ci.org/dprandzioch/avocado.svg?branch=develop) | mas
 ### Avocado
 Avocado is a deployment framework for web applications written in Ruby.
 
-The current release is 0.6.
+The current release is 0.6.1.
 
 ### Licensing
 Avocado is licensed under the GPLv2. For more Information have a look into the LICENSE file.
@@ -27,7 +27,7 @@ $ avo install
 to let Avocado place a deployment manifest file, called `Avofile`, in your project root folder. Then just open up the file in your editor of choice to customize your deployment process. The file is fully commented, giving you a basic understanding of how Avocado helps you to get your deployments done.
 
 ### Limitations
-Avocado does currently only work if you use Git for as version control system and SSH to deploy. Furthermore, the only implemented authentication method for both SSH and Git is public key authentication.
+Avocado does currently only work if you use Git or Bazaar for as version control system and SSH to deploy. Furthermore, the only implemented authentication method for both SSH and Git/Bazaar is public key authentication.
 
 ### Changelog
 There is a [CHANGELOG](CHANGELOG) file that contains all the changes throughout every version.

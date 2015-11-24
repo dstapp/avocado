@@ -1,3 +1,6 @@
+0.6.1
+* Print vcs tag/branch in deployment logfile
+
 0.6
 * Git now uses `--recursive` by default
 * Turned off password auth completely (publickey and hostbased only)

@@ -116,7 +116,15 @@ AvoDeploy::Deployment.configure do
   end
 
   task :log_deployment, after: :cleanup_remote, scope: :remote do
-    command "echo '[#{Time.now.strftime('%Y-%m-%d %H-%M-%S')}] revision #{get(:revision)} deployed by #{ENV['USER']}' >> #{get(:log_file)}"
+    refspec = ""
+
+    if @options.nil? == false && @options[:tag].nil? == false
+      refspec = " (#{@options[:tag]})"
+    elsif get(:branch).nil? == false
+      refspec = " (#{get(:branch)})"
+    end
+
+    command "echo '[#{Time.now.strftime('%Y-%m-%d %H-%M-%S')}] revision #{get(:revision)}#{refspec} deployed by #{ENV['USER']}' >> #{get(:log_file)}"
   end
 
   task :cleanup_local, after: :cleanup_remote do

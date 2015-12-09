@@ -3,7 +3,7 @@ develop: ![](https://travis-ci.org/dprandzioch/avocado.svg?branch=develop) | mas
 ### Avocado
 Avocado is a deployment framework for web applications written in Ruby.
 
-The current release is 0.6.1.
+The current release is 0.6.2.
 
 ### Licensing
 Avocado is licensed under the GPLv2. For more Information have a look into the LICENSE file.

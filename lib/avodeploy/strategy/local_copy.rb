@@ -85,9 +85,15 @@ AvoDeploy::Deployment.configure do
       exclude_param += " --exclude='#{file}'"
     end
 
-    # all other files must be absolute
-    files_to_delete.each do |file|
-      exclude_param += " --exclude='^#{file}$'"
+    # all other files must be absolute / BSD/Linux versions differ
+    if command('uname -a').stdout.include?('Linux')
+      files_to_delete.each do |file|
+        exclude_param += " --exclude='#{file}'"
+      end
+    else
+      files_to_delete.each do |file|
+        exclude_param += " --exclude='^#{file}$'"
+      end
     end
 
     command "tar cfz ../deploy.tar.gz #{exclude_param} ."
